@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 class DemoBuildContext extends StatefulWidget {
   const DemoBuildContext({Key? key}) : super(key: key);
 
@@ -32,6 +33,7 @@ class OngBaWidget extends StatefulWidget {
   Widget child;
 
   String text = "Xin chao";
+  int number = 0;
 
   OngBaWidget({required this.child});
 
@@ -46,6 +48,15 @@ class _OngBaWidgetState extends State<OngBaWidget> {
       child: Column(
         children: [
           Text("Ong ba"),
+          ElevatedButton(
+              onPressed: (){
+                setState(() {
+                  widget.number = Random().nextInt(20);
+                  widget.text = widget.number.toString();
+                });
+              },
+              child: Text("Random ${widget.number}")
+          ),
           MyInheritedWidget(child: widget.child, text: widget.text)
         ],
       ),
@@ -65,7 +76,7 @@ class MyInheritedWidget extends InheritedWidget{
 
   @override
   bool updateShouldNotify(covariant MyInheritedWidget oldWidget) {
-    return true;
+    return oldWidget.text != text;
   }
 }
 
@@ -80,8 +91,16 @@ class ChaMe extends StatefulWidget {
 }
 
 class _ChaMeState extends State<ChaMe> {
+
+  @override
+  void didChangeDependencies() {
+    print("Cha me didChangeDependencies");
+  }
+
   @override
   Widget build(BuildContext context) {
+    MyInheritedWidget? myInheritedWidget = MyInheritedWidget.of(context);
+    print("Cha me build");
     return Container(
       child: Column(
         children: [
@@ -97,6 +116,7 @@ class ConCai extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Con cai build");
     MyInheritedWidget? myInheritedWidget = MyInheritedWidget.of(context);
     return Container(
       child: Column(
